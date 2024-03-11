@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>10</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="container">
+        <form class="search-form js-search-form">
+          <input
+            type="text"
+            name="user-search-q"
+            class="search-input js-input"
+            placeholder="Search images..."
+          />
+          <button type="submit" class="search-btn">Search</button>
+        </form>
+      </div>
+    </header>
+
+    <main>
+      <section class="gallery-section">
+        <div class="container">
+          <div class="loader is-hidden js-loader"></div>
+          <ul class="gallery js-gallery list"></ul>
+          <!-- <button type="button" class="load-more js-load-more is-hidden">
+            Load more
+          </button>
+          <div class="backdrop js-backdrop is-hidden"></div> -->
+        </div>
+      </section>
+
+      <script type="module" src="./js/main.js"></script>
+    </main>
+  </body>
+</html>

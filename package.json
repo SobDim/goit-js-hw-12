@@ -1,0 +1,26 @@
+{
+  "name": "vanilla-app-template",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build --base=/goit-js-hw-11",
+    "preview": "vite preview",
+    "push": "git add .; git commit -m 'update'; git push;"
+  },
+  "devDependencies": {
+    "glob": "^8.1.0",
+    "vite": "^4.5.2"
+  },
+  "author": "Dmytro Sobchuk <sobdim@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "install": "^0.13.0",
+    "izitoast": "^1.4.0",
+    "simplelightbox": "^2.14.2",
+    "vanilla-tilt": "^1.8.1",
+    "vite-plugin-full-reload": "^1.0.5",
+    "vite-plugin-html-inject": "^1.0.1"
+  }
+}
