@@ -4,9 +4,9 @@ import VanillaTilt from 'vanilla-tilt';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-import { getPhotos } from './pixabay-api';
-import { createMarkup } from './render-functions';
-import { errorMsg, okMsg, warningMsg, hello } from './izi-toast-options';
+import { getPhotos } from './js/pixabay-api';
+import { createMarkup } from './js/render-functions';
+import { errorMsg, okMsg, warningMsg, hello } from './js/izi-toast-options';
 
 const searchForm = document.querySelector('.js-search-form');
 const input = searchForm.querySelector('.js-input');
