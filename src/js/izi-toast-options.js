@@ -45,7 +45,7 @@ const hello = {
   backgroundColor: 'rgb(0, 153, 255)',
   messageColor: 'rgb(255, 255, 255)',
   titleColor: 'rgb(255, 255, 255)',
-  position: 'topRight',
+  position: 'center',
   close: 'rgb(255, 255, 255)',
   messageSize: '16',
   messageLineHeight: '24',

@@ -1,24 +1,33 @@
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-import VanillaTilt from 'vanilla-tilt';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
 import { getPhotos } from './js/pixabay-api';
-import { createMarkup } from './js/render-functions';
+import { renderPage, gallery } from './js/render-functions';
 import { errorMsg, okMsg, warningMsg, hello } from './js/izi-toast-options';
 
 const searchForm = document.querySelector('.js-search-form');
 const input = searchForm.querySelector('.js-input');
 const loader = document.querySelector('.js-loader');
-const gallery = document.querySelector('.js-gallery');
+const loadMoreBtn = document.querySelector('.js-load-more');
 
 let searchQ;
-let pages = 1;
+let perPage = 15;
+let page = 1;
+let lastPage;
 
 searchForm.addEventListener('submit', onFormSubmit);
+loadMoreBtn.addEventListener('click', onloadMoreClick);
 
-function onFormSubmit(e) {
+input.addEventListener('focus', () => {
+  input.removeAttribute('placeholder');
+});
+input.addEventListener('blur', () => {
+  input.setAttribute('placeholder', 'Search images...');
+});
+
+// document.addEventListener('DOMContentLoaded', renderPage); ??????
+
+async function onFormSubmit(e) {
   e.preventDefault();
 
   loader.classList.remove('is-hidden');
@@ -28,37 +37,30 @@ function onFormSubmit(e) {
 
   if (!searchQ) return searchEmptyWarning();
 
-  getPhotos(searchQ, pages)
-    .then(res => {
-      if (res.hits.length === 0) return searchFinishedError();
-      searchFinishedOk(res.total);
+  try {
+    const data = await getPhotos(searchQ, page, perPage);
+    if (data.hits.length === 0) return searchFinishedError();
+    searchFinishedOk(data.total);
 
-      gallery.innerHTML = createMarkup(res.hits);
+    renderPage();
 
-      let galleryList = new SimpleLightbox('.gallery a', {
-        captionsData: 'alt',
-        captionDelay: 250,
-      });
-      galleryList.refresh();
+    lastPage = Math.ceil(data.total / perPage);
 
-      VanillaTilt.init(document.querySelectorAll('.gallery-item'), {
-        max: 25,
-        speed: 400,
-      });
-    })
-    .catch(console.log);
+    showLoadMoreBtn();
 
-  e.currentTarget.reset();
+    searchForm.reset();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-input.addEventListener('focus', () => {
-  input.removeAttribute('placeholder');
-});
-input.addEventListener('blur', () => {
-  input.setAttribute('placeholder', 'Search images...');
-});
-
-iziToast.info(hello);
+function onloadMoreClick() {
+  page += 1;
+  if (lastPage === page) {
+    hideLoadMoreBtn();
+    iziToast.info(hello);
+  }
+}
 
 function searchEmptyWarning() {
   loader.classList.add('is-hidden');
@@ -76,6 +78,15 @@ function searchFinishedOk(total) {
   iziToast.success(okMsg);
 }
 
+function showLoadMoreBtn() {
+  loadMoreBtn.classList.remove('is-hidden');
+}
+function hideLoadMoreBtn() {
+  loadMoreBtn.classList.add('is-hidden');
+}
+
+// iziToast.info(hello);
+
 //     ulEl.innerHTML = createMarkup(res.results);
 //     if (res.total < perPage) {
 //       loadMoreBtnHide();
@@ -85,11 +96,3 @@ function searchFinishedOk(total) {
 //   })
 //   .catch(console.log)
 //   .finally(() => spinnerStop());
-
-// e.currentTarget.reset();
-
-function imgLoaded(img) {
-  var imgWrapper = img.parentNode;
-
-  imgWrapper.className += imgWrapper.className ? ' loaded' : 'loaded';
-}

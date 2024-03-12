@@ -1,4 +1,34 @@
-export function createMarkup(arr) {
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+import VanillaTilt from 'vanilla-tilt';
+
+let galleryList = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+});
+
+// document.addEventListener('DOMContentLoaded', renderPage);
+
+export const gallery = document.querySelector('.js-gallery');
+
+export async function renderPage(arr) {
+  try {
+    const res = await getPhotos;
+    console.log();
+    gallery.insertAdjacentHTML('beforeend', createMarkup(arr));
+
+    galleryList.refresh();
+
+    VanillaTilt.init(document.querySelectorAll('.gallery-item'), {
+      max: 25,
+      speed: 400,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function createMarkup(arr) {
   return arr
     .map(arr => {
       const {
