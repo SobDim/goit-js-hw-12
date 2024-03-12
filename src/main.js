@@ -1,9 +1,12 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
-
 import { getPhotos } from './js/pixabay-api';
 import { renderPage, gallery, smoothOnLoad } from './js/render-functions';
-import { errorMsg, okMsg, warningMsg } from './js/izi-toast-options';
+import {
+  messageEmptyWarning,
+  messageFinishedError,
+  messageOnLastPage,
+  messageFinishedOk,
+} from './js/izi-toast-options';
+import 'izitoast/dist/css/iziToast.min.css';
 
 const searchForm = document.querySelector('.js-search-form');
 const input = searchForm.querySelector('.js-input');
@@ -87,27 +90,6 @@ function hideLoadMoreBtn() {
   loadMoreBtn.classList.add('is-hidden');
 }
 /*======= / LoadMore =======*/
-/*=========== Messages=========*/
-
-function messageEmptyWarning() {
-  iziToast.warning(warningMsg);
-}
-
-function messageFinishedError() {
-  iziToast.error(errorMsg);
-}
-
-function messageFinishedOk(total) {
-  okMsg.message = `We found ${total} photos`;
-  iziToast.success(okMsg);
-}
-
-function messageOnLastPage(total) {
-  okMsg.message = `It's all ${total} photos`;
-  iziToast.success(okMsg);
-}
-
-/*=========== /Messages=========*/
 
 /*=========== Loader Spinner=========*/
 function loaderShow() {
