@@ -37,18 +37,4 @@ const warningMsg = {
   messageLineHeight: '24',
 };
 
-const hello = {
-  // title: 'Hello',
-  message: 'Welcome! Please enter your search query!',
-
-  iconUrl: './img/bell.svg',
-  backgroundColor: 'rgb(0, 153, 255)',
-  messageColor: 'rgb(255, 255, 255)',
-  titleColor: 'rgb(255, 255, 255)',
-  position: 'center',
-  close: 'rgb(255, 255, 255)',
-  messageSize: '16',
-  messageLineHeight: '24',
-};
-
-export { errorMsg, okMsg, warningMsg, hello };
+export { errorMsg, okMsg, warningMsg };

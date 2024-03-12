@@ -1,13 +1,12 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import VanillaTilt from 'vanilla-tilt';
+import lazySizes from 'lazysizes';
 
 let galleryList = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
-
-// document.addEventListener('DOMContentLoaded', renderPage);
 
 export const gallery = document.querySelector('.js-gallery');
 
@@ -29,17 +28,19 @@ function createMarkup(arr) {
         webformatURL,
         tags,
         largeImageURL,
+        previewURL,
+
         likes,
         views,
         comments,
         downloads,
       } = arr;
-      return ` <li class="gallery-item" data-tilt> 
-              <a class="gallery-link" href="${largeImageURL}">
+      return ` <li class="gallery-item blurred-img" data-tilt> 
+              <a class="gallery-link " href="${largeImageURL}">
               <img  
-                loading="lazy"
-                class="gallery-image"
-                src="${webformatURL}"
+                class="gallery-image lazyload"
+                data-src="${webformatURL}"
+                src="${previewURL}"
                 alt="${tags}"
               />
             </a>
@@ -52,4 +53,14 @@ function createMarkup(arr) {
           </li>`;
     })
     .join('');
+}
+
+export function smoothOnLoad() {
+  let galleryImg = gallery.querySelector('.gallery-item');
+  let rect = galleryImg.getBoundingClientRect();
+
+  window.scrollBy({
+    top: rect.height * 2,
+    behavior: 'smooth',
+  });
 }

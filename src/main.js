@@ -2,8 +2,8 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
 import { getPhotos } from './js/pixabay-api';
-import { renderPage, gallery } from './js/render-functions';
-import { errorMsg, okMsg, warningMsg, hello } from './js/izi-toast-options';
+import { renderPage, gallery, smoothOnLoad } from './js/render-functions';
+import { errorMsg, okMsg, warningMsg } from './js/izi-toast-options';
 
 const searchForm = document.querySelector('.js-search-form');
 const input = searchForm.querySelector('.js-input');
@@ -25,11 +25,8 @@ input.addEventListener('blur', () => {
   input.setAttribute('placeholder', 'Search images...');
 });
 
-// document.addEventListener('DOMContentLoaded', renderPage); ??????
-
 async function onFormSubmit(e) {
   e.preventDefault();
-
   hideLoadMoreBtn();
 
   gallery.innerHTML = '';
@@ -52,21 +49,24 @@ async function onFormSubmit(e) {
       showLoadMoreBtn();
     }
 
-    searchForm.reset();
+    e.target.reset();
   } catch (error) {
     console.log(error);
   } finally {
     loaderHide();
   }
 }
-
+/*======= LoadMore =======*/
 async function onloadMoreClick() {
   page += 1;
 
   try {
     loaderShow();
+
     const data = await getPhotos(searchQ, page, perPage);
+
     renderPage(data.hits);
+    smoothOnLoad();
 
     lastPage = Math.ceil(data.total / perPage);
     if (lastPage === page) {
@@ -86,7 +86,7 @@ function showLoadMoreBtn() {
 function hideLoadMoreBtn() {
   loadMoreBtn.classList.add('is-hidden');
 }
-
+/*======= / LoadMore =======*/
 /*=========== Messages=========*/
 
 function messageEmptyWarning() {
