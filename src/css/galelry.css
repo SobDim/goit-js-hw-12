@@ -79,13 +79,13 @@
 
 .gallery {
   position: relative;
-  width: 1128px;
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 24px;
-  margin: 0 auto;
+  margin-bottom: 48px;
 }
 
 
@@ -133,6 +133,8 @@
 .gallery-item:hover .property-list {
   transform: translateZ(50px) scaleY(1);
 }
+
+
 
 
 /* <!--=========== /Gallery =================-->*/

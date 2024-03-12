@@ -30,52 +30,54 @@ input.addEventListener('blur', () => {
 async function onFormSubmit(e) {
   e.preventDefault();
 
-  loader.classList.remove('is-hidden');
-  gallery.innerHTML = '';
+  hideLoadMoreBtn();
 
+  gallery.innerHTML = '';
+  page = 1;
   searchQ = e.currentTarget.elements['user-search-q'].value.trim();
 
-  if (!searchQ) return searchEmptyWarning();
+  if (!searchQ) return messageEmptyWarning();
 
   try {
+    loaderShow();
     const data = await getPhotos(searchQ, page, perPage);
-    if (data.hits.length === 0) return searchFinishedError();
-    searchFinishedOk(data.total);
+    if (data.hits.length === 0) return messageFinishedError();
 
-    renderPage();
+    messageFinishedOk(data.total);
+    renderPage(data.hits);
 
-    lastPage = Math.ceil(data.total / perPage);
-
-    showLoadMoreBtn();
+    if (data.total < perPage) {
+      hideLoadMoreBtn();
+    } else {
+      showLoadMoreBtn();
+    }
 
     searchForm.reset();
   } catch (error) {
     console.log(error);
+  } finally {
+    loaderHide();
   }
 }
 
-function onloadMoreClick() {
+async function onloadMoreClick() {
   page += 1;
-  if (lastPage === page) {
-    hideLoadMoreBtn();
-    iziToast.info(hello);
+
+  try {
+    loaderShow();
+    const data = await getPhotos(searchQ, page, perPage);
+    renderPage(data.hits);
+
+    lastPage = Math.ceil(data.total / perPage);
+    if (lastPage === page) {
+      hideLoadMoreBtn();
+      messageOnLastPage(data.total);
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    loaderHide();
   }
-}
-
-function searchEmptyWarning() {
-  loader.classList.add('is-hidden');
-  iziToast.warning(warningMsg);
-}
-
-function searchFinishedError() {
-  loader.classList.add('is-hidden');
-  iziToast.error(errorMsg);
-}
-
-function searchFinishedOk(total) {
-  loader.classList.add('is-hidden');
-  okMsg.message = `We found ${total} photos`;
-  iziToast.success(okMsg);
 }
 
 function showLoadMoreBtn() {
@@ -85,14 +87,33 @@ function hideLoadMoreBtn() {
   loadMoreBtn.classList.add('is-hidden');
 }
 
-// iziToast.info(hello);
+/*=========== Messages=========*/
 
-//     ulEl.innerHTML = createMarkup(res.results);
-//     if (res.total < perPage) {
-//       loadMoreBtnHide();
-//     } else {
-//       loadMoreBtnShow();
-//     }
-//   })
-//   .catch(console.log)
-//   .finally(() => spinnerStop());
+function messageEmptyWarning() {
+  iziToast.warning(warningMsg);
+}
+
+function messageFinishedError() {
+  iziToast.error(errorMsg);
+}
+
+function messageFinishedOk(total) {
+  okMsg.message = `We found ${total} photos`;
+  iziToast.success(okMsg);
+}
+
+function messageOnLastPage(total) {
+  okMsg.message = `It's all ${total} photos`;
+  iziToast.success(okMsg);
+}
+
+/*=========== /Messages=========*/
+
+/*=========== Loader Spinner=========*/
+function loaderShow() {
+  loader.classList.remove('is-hidden');
+}
+function loaderHide() {
+  loader.classList.add('is-hidden');
+}
+/*=========== /Loader Spinner=========*/

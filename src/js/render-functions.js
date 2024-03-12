@@ -11,21 +11,15 @@ let galleryList = new SimpleLightbox('.gallery a', {
 
 export const gallery = document.querySelector('.js-gallery');
 
-export async function renderPage(arr) {
-  try {
-    const res = await getPhotos;
-    console.log();
-    gallery.insertAdjacentHTML('beforeend', createMarkup(arr));
+export function renderPage(arr) {
+  gallery.insertAdjacentHTML('beforeend', createMarkup(arr));
 
-    galleryList.refresh();
+  galleryList.refresh();
 
-    VanillaTilt.init(document.querySelectorAll('.gallery-item'), {
-      max: 25,
-      speed: 400,
-    });
-  } catch (error) {
-    console.log(error);
-  }
+  VanillaTilt.init(document.querySelectorAll('.gallery-item'), {
+    max: 25,
+    speed: 400,
+  });
 }
 
 function createMarkup(arr) {
@@ -43,6 +37,7 @@ function createMarkup(arr) {
       return ` <li class="gallery-item" data-tilt> 
               <a class="gallery-link" href="${largeImageURL}">
               <img  
+                loading="lazy"
                 class="gallery-image"
                 src="${webformatURL}"
                 alt="${tags}"
